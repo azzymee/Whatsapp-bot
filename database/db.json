@@ -1,0 +1,43 @@
+{
+  "users": {
+    "59528632615055_lid": {
+      "leveling": {
+        "xp": 149,
+        "level": 1,
+        "lastXpAt": 0
+      },
+      "jid": "59528632615055@lid"
+    },
+    "269501010575537_lid": {
+      "leveling": {
+        "xp": 92,
+        "level": 0,
+        "lastXpAt": 0
+      },
+      "jid": "269501010575537@lid",
+      "economy": {
+        "wallet": 796,
+        "bank": 0,
+        "lastDaily": 1785004748201,
+        "lastWork": 1785004772222,
+        "lastRob": 0
+      }
+    },
+    "171507137405054_lid": {
+      "leveling": {
+        "xp": 22,
+        "level": 0,
+        "lastXpAt": 0
+      },
+      "jid": "171507137405054@lid"
+    }
+  },
+  "groups": {
+    "120363431388687123_g_us": {
+      "settings": {
+        "welcome": true
+      }
+    }
+  },
+  "settings": {}
+}
