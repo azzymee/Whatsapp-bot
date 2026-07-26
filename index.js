@@ -17,6 +17,7 @@ const path = require('path');
 // sessions/ before starting the socket, so the bot logs in automatically
 // without needing a fresh QR/pairing code.
 function restoreSessionFromEnv() {
+  logger.info(`SESSION_DATA present: ${!!process.env.SESSION_DATA}, length: ${(process.env.SESSION_DATA || '').length}`);
   const sessionDir = path.join(__dirname, 'sessions');
   const alreadyHasSession = fs.existsSync(path.join(sessionDir, 'creds.json'));
 
