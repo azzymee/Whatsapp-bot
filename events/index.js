@@ -208,6 +208,7 @@ function registerEvents(sock) {
     if (type !== 'notify') return;
 
     for (const msg of messages) {
+      logger.info(`Message received from ${msg.key.remoteJid}, fromMe: ${msg.key.fromMe}`);
       if (!msg.message) continue; // empty/protocol-only messages
       if (msg.key.remoteJid === STATUS_BROADCAST_JID) continue; // status updates
 
