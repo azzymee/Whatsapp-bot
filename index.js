@@ -33,7 +33,9 @@ function restoreSessionFromEnv() {
     fs.unlinkSync(zipPath);
 
     logger.info('Session restored successfully.');
+    return true;
   }
+  return false;
 }
 const { loadAllCommands, watchCommands } = require('./lib/commandHandler');
 const { loadAllPlugins } = require('./lib/pluginLoader');
@@ -73,8 +75,8 @@ async function main() {
   // The "ready" banner (commands/plugins/connection summary) is printed
   // from lib/connection.js once the socket actually reaches "open",
   // since that's the last of the three things to become true.
- restoreSessionFromEnv();
-  await startSocket();
+ const restored = restoreSessionFromEnv();
+  await startSocket(restored);
 
   process.on('unhandledRejection', (reason) => {
     logger.error({ reason }, 'Unhandled promise rejection');
