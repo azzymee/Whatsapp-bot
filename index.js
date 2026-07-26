@@ -9,6 +9,31 @@ const logger = require('./lib/logger');
 const config = require('./config/config');
 const db = require('./database/db');
 const { startSocket } = require('./lib/connection');
+const AdmZip = require('adm-zip');
+const fs = require('fs');
+const path = require('path');
+
+// If Railway gave us a saved session (SESSION_DATA), unpack it into
+// sessions/ before starting the socket, so the bot logs in automatically
+// without needing a fresh QR/pairing code.
+function restoreSessionFromEnv() {
+  const sessionDir = path.join(__dirname, 'sessions');
+  const alreadyHasSession = fs.existsSync(path.join(sessionDir, 'creds.json'));
+
+  if (!alreadyHasSession && process.env.SESSION_DATA) {
+    logger.info('Restoring WhatsApp session from SESSION_DATA...');
+    const buffer = Buffer.from(process.env.SESSION_DATA, 'base64');
+    const zipPath = path.join(__dirname, 'session-restore.zip');
+    fs.writeFileSync(zipPath, buffer);
+
+    const zip = new AdmZip(zipPath);
+    fs.mkdirSync(sessionDir, { recursive: true });
+    zip.extractAllTo(sessionDir, true);
+    fs.unlinkSync(zipPath);
+
+    logger.info('Session restored successfully.');
+  }
+}
 const { loadAllCommands, watchCommands } = require('./lib/commandHandler');
 const { loadAllPlugins } = require('./lib/pluginLoader');
 const { printBootBanner } = require('./lib/banner');
@@ -47,6 +72,7 @@ async function main() {
   // The "ready" banner (commands/plugins/connection summary) is printed
   // from lib/connection.js once the socket actually reaches "open",
   // since that's the last of the three things to become true.
+ restoreSessionFromEnv();
   await startSocket();
 
   process.on('unhandledRejection', (reason) => {
